@@ -1,0 +1,178 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>VMT_HOOK | 0xNOPE</title><meta name="keywords" content="Reverse,Hook"><meta name="author" content="0xNOPE"><meta name="copyright" content="0xNOPE"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="我们知道，如果一个类当中有虚函数，那么这些类的每个对象将在偏移量0x0处包含指向vTable（虚表）的指针，vTable中保存的则是当前类中所有虚函数的函数地址。它只是一个指针数组，对象通过在vTable中找到它们的指针来调用这些函数。要执行vTable挂钩，我们要做的就是用指向自己函数的指针覆盖该指针。在函数的最后，只需调用原始函数即可。 内存结构图如下： 步骤有三：  获得虚表指针 修改虚表的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="VMT_HOOK">
+<meta property="og:url" content="http://0xnope.top/2021/03/03/VMT-HOOK/index.html">
+<meta property="og:site_name" content="0xNOPE">
+<meta property="og:description" content="我们知道，如果一个类当中有虚函数，那么这些类的每个对象将在偏移量0x0处包含指向vTable（虚表）的指针，vTable中保存的则是当前类中所有虚函数的函数地址。它只是一个指针数组，对象通过在vTable中找到它们的指针来调用这些函数。要执行vTable挂钩，我们要做的就是用指向自己函数的指针覆盖该指针。在函数的最后，只需调用原始函数即可。 内存结构图如下： 步骤有三：  获得虚表指针 修改虚表的">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/DemeterWu/demeter-wu-2019-xmas-countdown2.jpg">
+<meta property="article:published_time" content="2021-03-03T14:12:51.000Z">
+<meta property="article:modified_time" content="2021-03-03T14:26:06.044Z">
+<meta property="article:author" content="0xNOPE">
+<meta property="article:tag" content="Reverse">
+<meta property="article:tag" content="Hook">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/DemeterWu/demeter-wu-2019-xmas-countdown2.jpg"><link rel="shortcut icon" href="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/others/20210303185002.png"><link rel="canonical" href="http://0xnope.top/2021/03/03/VMT-HOOK/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"簡"},
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  relativeDate: {
+    homepage: true,
+    post: true
+  },
+  runtime: '',
+  date_suffix: {
+    just: 'Just',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'mediumZoom',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: false,
+  postUpdate: '2021-03-03 22:26:06'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const fontSizeVal = saveToLocal.get('global-font-size')
+    if (fontSizeVal !== undefined) {
+      document.documentElement.style.setProperty('--global-font-size', fontSizeVal + 'px')
+    }
+    })(window)</script><meta name="generator" content="Hexo 5.4.0"><link rel="alternate" href="/atom.xml" title="0xNOPE" type="application/atom+xml">
+</head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">Loading...</div></div></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/huiye/huiye.jpg" onerror="onerror=null;src='https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/others/20210303184956.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">6</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">Tags</div><div class="length-num">4</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">Categories</div><div class="length-num">3</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">0xNOPE</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">VMT_HOOK</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2021-03-03T14:12:51.000Z" title="Created 2021-03-03 22:12:51">2021-03-03</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2021-03-03T14:26:06.044Z" title="Updated 2021-03-03 22:26:06">2021-03-03</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/C/">C++</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/C/Reverse/">Reverse</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="VMT_HOOK"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post View:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div><article class="post-content" id="article-container"><p>我们知道，如果一个类当中有虚函数，那么这些类的每个对象将在偏移量0x0处包含指向vTable（虚表）的指针，vTable中保存的则是当前类中所有虚函数的函数地址。它只是一个指针数组，对象通过在vTable中找到它们的指针来调用这些函数。要执行vTable挂钩，我们要做的就是用指向自己函数的指针覆盖该指针。在函数的最后，只需调用原始函数即可。</p>
+<p>内存结构图如下：<img src="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/others/20210303221558.png" alt="虚函数和虚表的内存分布"></p>
+<p>步骤有三：</p>
+<ol>
+<li>获得虚表指针</li>
+<li>修改虚表的内存保护属性</li>
+<li>修改虚表中的虚函数地址为我们的函数地址</li>
+</ol>
+<p>代码如下：</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;Windows.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Cat</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	Cat() &#123;</span><br><span class="line">		<span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;Cat无参构造函数&quot;</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	~Cat() &#123;</span><br><span class="line">		<span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;~Cat析构函数&quot;</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">catSpeak</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;小猫在说话&quot;</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">catSinging</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;~~~miao喵&quot;</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">catName</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;小猫名字是Tom&quot;</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">Print</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;Print&quot;</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">int</span> m_Age;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">dogSpeak</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;小狗在说话&quot;</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">dogSinging</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;~~~wang汪&quot;</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">dogName</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;小狗名字是Bob&quot;</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	Cat cat;</span><br><span class="line">	Cat&amp; obj = cat;		<span class="comment">//可以虚调用</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">//第一步,获取自己的虚表指针</span></span><br><span class="line">	<span class="keyword">int</span> dwAddr1 = *(<span class="keyword">int</span>*)&amp;cat;		</span><br><span class="line">	<span class="keyword">int</span> dwAddr2 = *(<span class="keyword">int</span>*)&amp;cat+<span class="number">4</span>;</span><br><span class="line">	<span class="keyword">int</span> dwAddr3 = *(<span class="keyword">int</span>*)&amp;cat+<span class="number">8</span>;</span><br><span class="line"></span><br><span class="line">	obj.catSpeak();					<span class="comment">//虚函数调用,测试作用</span></span><br><span class="line">	obj.catSinging();</span><br><span class="line">	obj.catName();</span><br><span class="line"></span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; <span class="string">&quot;\n----------------Hook Starting----------------\n&quot;</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">	<span class="comment">//第二步修改虚表指针的内存保护属性,下方更改虚表</span></span><br><span class="line">	DWORD dwOld = <span class="number">0x0</span>;</span><br><span class="line">	VirtualProtect((LPVOID)dwAddr1,<span class="number">0x1000</span>, PAGE_EXECUTE_READWRITE, &amp;dwOld);</span><br><span class="line"></span><br><span class="line">	<span class="comment">//第三步,HOOK,也就是将我们的函数地址,写入到虚表中</span></span><br><span class="line">	(*(<span class="keyword">int</span>*)dwAddr1) = (<span class="keyword">int</span>)dogSpeak;</span><br><span class="line">	(*(<span class="keyword">int</span>*)dwAddr2) = (<span class="keyword">int</span>)dogSinging;</span><br><span class="line">	(*(<span class="keyword">int</span>*)dwAddr3) = (<span class="keyword">int</span>)dogName;</span><br><span class="line">	</span><br><span class="line">	obj.catSpeak();</span><br><span class="line">	obj.catSinging();</span><br><span class="line">	obj.catName();</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>运行结果如下：</p>
+<p><img src="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/others/20210303221809.png" alt="VMTHOOK运行结果"></p>
+<p>可以看到，下面我们明明调用的<strong>catSpeak(); catSinging(); catName()</strong>;三个函数，</p>
+<p>但是由于我们将其hook了，最终显示的调用函数是<strong>dogSpeak();</strong> <strong>dogSinging();</strong> <strong>dogName();</strong></p>
+<p>VirtualProtect函数原型如下：</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function">BOOL <span class="title">VirtualProtect</span><span class="params">(  LPVOID lpAddress,			<span class="comment">//要更改其访问保护属性的页面区域的起始页面的地址。  </span></span></span></span><br><span class="line"><span class="function"><span class="params">                    SIZE_T dwSize,				<span class="comment">//要更改其访问保护属性的区域的大小，以字节为单位  </span></span></span></span><br><span class="line"><span class="function"><span class="params">                    DWORD  flNewProtect,			<span class="comment">//内存保护选项。  </span></span></span></span><br><span class="line"><span class="function"><span class="params">                    PDWORD lpflOldProtect		<span class="comment">//指向变量的指针，该变量接收页面的指定区域中第一页的先前访问保护值。 </span></span></span></span><br><span class="line"><span class="function"><span class="params">)</span></span>;</span><br></pre></td></tr></table></figure>
+
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">Author: </span><span class="post-copyright-info"><a href="mailto:undefined">0xNOPE</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">Link: </span><span class="post-copyright-info"><a href="http://0xnope.top/2021/03/03/VMT-HOOK/">http://0xnope.top/2021/03/03/VMT-HOOK/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Reverse/">Reverse</a><a class="post-meta__tags" href="/tags/Hook/">Hook</a></div><div class="post_share"><div class="social-share" data-image="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/DemeterWu/demeter-wu-2019-xmas-countdown2.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button button--animated"><i class="fas fa-qrcode"></i> Donate</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/others/20210303184943.jpg" target="_blank"><img class="post-qr-code-img" src="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/others/20210303184943.jpg" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/others/20210303184950.jpg" target="_blank"><img class="post-qr-code-img" src="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/others/20210303184950.jpg" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li></ul></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2021/03/03/Cpp%E4%B8%AD%E7%9A%84%E9%9D%99%E6%80%81%E7%BB%91%E5%AE%9A%E5%92%8C%E5%8A%A8%E6%80%81%E7%BB%91%E5%AE%9A/"><img class="next-cover" src="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/DemeterWu/demeter-wu-2019-xmas-countdown7.jpg" onerror="onerror=null;src='https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/others/20210303185012.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">Next Post</div><div class="next_info">Cpp中的静态绑定和动态绑定</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-info-avatar is-center"><img class="avatar-img" src="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/huiye/huiye.jpg" onerror="this.onerror=null;this.src='https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/others/20210303184956.gif'" alt="avatar"/><div class="author-info__name">0xNOPE</div><div class="author-info__description"></div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">6</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">Tags</div><div class="length-num">4</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">Categories</div><div class="length-num">3</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>Announcement</span></div><div class="announcement_content">For you a thousand times over~</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Post</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2021/03/03/VMT-HOOK/" title="VMT_HOOK"><img src="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/DemeterWu/demeter-wu-2019-xmas-countdown2.jpg" onerror="this.onerror=null;this.src='https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/others/20210303185012.jpg'" alt="VMT_HOOK"/></a><div class="content"><a class="title" href="/2021/03/03/VMT-HOOK/" title="VMT_HOOK">VMT_HOOK</a><time datetime="2021-03-03T14:12:51.000Z" title="Created 2021-03-03 22:12:51">2021-03-03</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/03/03/Cpp%E4%B8%AD%E7%9A%84%E9%9D%99%E6%80%81%E7%BB%91%E5%AE%9A%E5%92%8C%E5%8A%A8%E6%80%81%E7%BB%91%E5%AE%9A/" title="Cpp中的静态绑定和动态绑定"><img src="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/DemeterWu/demeter-wu-2019-xmas-countdown7.jpg" onerror="this.onerror=null;this.src='https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/others/20210303185012.jpg'" alt="Cpp中的静态绑定和动态绑定"/></a><div class="content"><a class="title" href="/2021/03/03/Cpp%E4%B8%AD%E7%9A%84%E9%9D%99%E6%80%81%E7%BB%91%E5%AE%9A%E5%92%8C%E5%8A%A8%E6%80%81%E7%BB%91%E5%AE%9A/" title="Cpp中的静态绑定和动态绑定">Cpp中的静态绑定和动态绑定</a><time datetime="2021-03-03T12:05:24.000Z" title="Created 2021-03-03 20:05:24">2021-03-03</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/03/03/%E8%99%9A%E5%87%BD%E6%95%B0%E7%9A%84%E5%AE%9E%E8%B0%83%E7%94%A8%E5%92%8C%E8%99%9A%E8%B0%83%E7%94%A8/" title="虚函数的实调用和虚调用"><img src="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/DemeterWu/demeter-wu-xmas2020-countdown-1.jpg" onerror="this.onerror=null;this.src='https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/others/20210303185012.jpg'" alt="虚函数的实调用和虚调用"/></a><div class="content"><a class="title" href="/2021/03/03/%E8%99%9A%E5%87%BD%E6%95%B0%E7%9A%84%E5%AE%9E%E8%B0%83%E7%94%A8%E5%92%8C%E8%99%9A%E8%B0%83%E7%94%A8/" title="虚函数的实调用和虚调用">虚函数的实调用和虚调用</a><time datetime="2021-03-03T11:45:54.000Z" title="Created 2021-03-03 19:45:54">2021-03-03</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/03/02/bbb/" title="No title"><img src="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/DemeterWu/demeter-wu-xmas2020-countdown-6.jpg" onerror="this.onerror=null;this.src='https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/others/20210303185012.jpg'" alt="No title"/></a><div class="content"><a class="title" href="/2021/03/02/bbb/" title="No title">No title</a><time datetime="2021-03-02T13:51:55.239Z" title="Created 2021-03-02 21:51:55">2021-03-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/03/02/java%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/" title="java复习资料"><img src="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/DemeterWu/demeter-wu-2019-xmas-countdown5-v2.jpg" onerror="this.onerror=null;this.src='https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/others/20210303185012.jpg'" alt="java复习资料"/></a><div class="content"><a class="title" href="/2021/03/02/java%E6%9C%9F%E6%9C%AB%E5%A4%8D%E4%B9%A0/" title="java复习资料">java复习资料</a><time datetime="2021-03-02T13:51:55.000Z" title="Created 2021-03-02 21:51:55">2021-03-02</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2021 By 0xNOPE</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">Hi, welcome to my <a target="_blank" rel="noopener" href="https://github.com/">blog</a>!</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="font-plus" type="button" title="Increase font size"><i class="fas fa-plus"></i></button><button id="font-minus" type="button" title="Decrease font size"><i class="fas fa-minus"></i></button><button id="translateLink" type="button" title="Switch Between Traditional Chinese And Simplified Chinese">繁</button><button id="darkmode" type="button" title="Switch Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between single-column and double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="Back To Top"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.jsdelivr.net/npm/medium-zoom/dist/medium-zoom.min.js"></script><script>var preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.remove("loaded")
+
+  }
+}
+window.addEventListener('load',preloader.endLoading())</script><div class="js-pjax"></div><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-fluttering-ribbon.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
