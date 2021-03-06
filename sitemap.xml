@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://0xnope.top/2021/03/06/PE%E6%96%87%E4%BB%B6%E6%80%BB%E7%BB%93/</loc>
+    
+    <lastmod>2021-03-06</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://0xnope.top/2021/03/06/inline-hook/</loc>
     
     <lastmod>2021-03-06</lastmod>
@@ -116,6 +123,20 @@
   </url>
   
   <url>
+    <loc>http://0xnope.top/tags/PE/</loc>
+    <lastmod>2021-03-06</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://0xnope.top/tags/Windows/</loc>
+    <lastmod>2021-03-06</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>http://0xnope.top/tags/CTF/</loc>
     <lastmod>2021-03-06</lastmod>
     <changefreq>daily</changefreq>
@@ -133,6 +154,13 @@
   
   <url>
     <loc>http://0xnope.top/categories/java/</loc>
+    <lastmod>2021-03-06</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://0xnope.top/categories/C/Win/</loc>
     <lastmod>2021-03-06</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
