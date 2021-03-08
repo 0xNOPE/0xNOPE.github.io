@@ -109,14 +109,14 @@
   </url>
   
   <url>
-    <loc>http://0xnope.top/tags/java/</loc>
+    <loc>http://0xnope.top/tags/ASM/</loc>
     <lastmod>2021-03-08</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>http://0xnope.top/tags/ASM/</loc>
+    <loc>http://0xnope.top/tags/java/</loc>
     <lastmod>2021-03-08</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -153,6 +153,13 @@
   </url>
   
   <url>
+    <loc>http://0xnope.top/categories/Reverser/</loc>
+    <lastmod>2021-03-08</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>http://0xnope.top/categories/Reverse/</loc>
     <lastmod>2021-03-08</lastmod>
     <changefreq>daily</changefreq>
@@ -161,13 +168,6 @@
   
   <url>
     <loc>http://0xnope.top/categories/java/</loc>
-    <lastmod>2021-03-08</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>http://0xnope.top/categories/Reverser/</loc>
     <lastmod>2021-03-08</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
