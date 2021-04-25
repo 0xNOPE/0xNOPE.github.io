@@ -1,0 +1,321 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>0xNOPE | 0xNOPE</title><meta name="keywords" content="Windows,Malware_analysis"><meta name="author" content="0xNOPE"><meta name="copyright" content="0xNOPE"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="样本信息彩虹猫病毒是一个基本的恶搞病毒，没有采取隐藏或者免杀等技术，适合新手分析。该病毒会修改MBR主引导扇区，以此来破坏电脑的正常启动，属于MBR病毒。在修改MBR后，电脑蓝屏，Windows无法启动，一直播放一个彩虹猫的画面。   运行样本双击加载病毒，会出现这样的2个提示框，告知你这是一个恶搞程序，是否要运行，  点击确认过后弹出记事本程序。  之后会出现：  6个MEMZ进程 多个浏览器窗">
+<meta property="og:type" content="article">
+<meta property="og:title" content="0xNOPE">
+<meta property="og:url" content="http://0xnope.top/2021/04/21/%E8%AE%B0%E4%B8%80%E6%AC%A1MEMZ%E6%A0%B7%E6%9C%AC%E5%88%86%E6%9E%90/index.html">
+<meta property="og:site_name" content="0xNOPE">
+<meta property="og:description" content="样本信息彩虹猫病毒是一个基本的恶搞病毒，没有采取隐藏或者免杀等技术，适合新手分析。该病毒会修改MBR主引导扇区，以此来破坏电脑的正常启动，属于MBR病毒。在修改MBR后，电脑蓝屏，Windows无法启动，一直播放一个彩虹猫的画面。   运行样本双击加载病毒，会出现这样的2个提示框，告知你这是一个恶搞程序，是否要运行，  点击确认过后弹出记事本程序。  之后会出现：  6个MEMZ进程 多个浏览器窗">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/DemeterWu/demeter-wu-xmas2020-countdown-7.jpg">
+<meta property="article:published_time" content="2021-04-21T07:38:51.000Z">
+<meta property="article:modified_time" content="2021-04-25T15:24:04.940Z">
+<meta property="article:author" content="0xNOPE">
+<meta property="article:tag" content="Windows">
+<meta property="article:tag" content="Malware_analysis">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/DemeterWu/demeter-wu-xmas2020-countdown-7.jpg"><link rel="shortcut icon" href="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/others/20210303185002.png"><link rel="canonical" href="http://0xnope.top/2021/04/21/%E8%AE%B0%E4%B8%80%E6%AC%A1MEMZ%E6%A0%B7%E6%9C%AC%E5%88%86%E6%9E%90/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"簡"},
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  relativeDate: {
+    homepage: true,
+    post: true
+  },
+  runtime: '',
+  date_suffix: {
+    just: 'Just',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'mediumZoom',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2021-04-25 23:24:04'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const fontSizeVal = saveToLocal.get('global-font-size')
+    if (fontSizeVal !== undefined) {
+      document.documentElement.style.setProperty('--global-font-size', fontSizeVal + 'px')
+    }
+    })(window)</script><meta name="generator" content="Hexo 5.4.0"><link rel="alternate" href="/atom.xml" title="0xNOPE" type="application/atom+xml">
+</head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">Loading...</div></div></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/huiye/huiye.jpg" onerror="onerror=null;src='https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/others/20210303184956.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">13</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">Tags</div><div class="length-num">8</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">Categories</div><div class="length-num">3</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/DemeterWu/demeter-wu-xmas2020-countdown-7.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">0xNOPE</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">No title</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2021-04-21T07:38:51.000Z" title="Created 2021-04-21 15:38:51">2021-04-21</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2021-04-25T15:24:04.940Z" title="Updated 2021-04-25 23:24:04">2021-04-25</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Reverse/">Reverse</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post View:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="样本信息"><a href="#样本信息" class="headerlink" title="样本信息"></a>样本信息</h1><p>彩虹猫病毒是一个基本的恶搞病毒，没有采取隐藏或者免杀等技术，适合新手分析。该病毒会修改MBR主引导扇区，以此来破坏电脑的正常启动，属于MBR病毒。在修改MBR后，电脑蓝屏，Windows无法启动，一直播放一个彩虹猫的画面。</p>
+<img src="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/others/20210421154215.png" alt="MEMZ000" style="zoom:150%;" />
+
+<h1 id="运行样本"><a href="#运行样本" class="headerlink" title="运行样本"></a>运行样本</h1><p>双击加载病毒，会出现这样的2个提示框，告知你这是一个恶搞程序，是否要运行，</p>
+<p><img src="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/others/20210422211004.png" alt="MEMZ001"></p>
+<p>点击确认过后弹出记事本程序。</p>
+<p><img src="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/others/20210421155051.png" alt="MEMZ003"></p>
+<p>之后会出现：</p>
+<ul>
+<li>6个MEMZ进程</li>
+<li>多个浏览器窗口</li>
+<li>鼠标不受控制</li>
+<li>窗口颜色发生变化</li>
+<li>弹出很多图标</li>
+<li>…</li>
+</ul>
+<p><img src="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/others/20210421155104.png" alt="MEMZ004"></p>
+<p>任意关掉一个MEMZ进程，或者关闭计算机，系统就会崩溃蓝屏，重启电脑之后，会发现无法登陆系统，一只彩虹猫随着音乐在那儿跳。这说明MBR已经被修改，无法引导操作系统的启动。</p>
+<p><img src="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/others/20210421155511.png" alt="MEMZ005"></p>
+<p><img src="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/others/20210421155520.png" alt="MEMZ006"></p>
+<h1 id="静态分析"><a href="#静态分析" class="headerlink" title="静态分析"></a>静态分析</h1><p>首先使用PEID和ExeInfoPE对样本进行查壳，查壳结果如下：</p>
+<p><img src="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/others/20210421155836.png" alt="MEMZ007"></p>
+<p>PEID查出有ASProtect壳，但是拖入ida似乎是没壳的，很奇怪。</p>
+<p>StudyPE+查看导入表</p>
+<p><img src="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/others/20210421160057.png" alt="MEMZ008"></p>
+<p>导入函数中我们需要注意如下API函数：</p>
+<table>
+<thead>
+<tr>
+<th>功能</th>
+<th>dll</th>
+<th>API</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>改变窗口</td>
+<td>GDI32</td>
+<td>bitblt、stretchblt</td>
+</tr>
+<tr>
+<td>调用外部程序</td>
+<td>SHELL32</td>
+<td>ShellExecute</td>
+</tr>
+<tr>
+<td>播放音乐</td>
+<td>WINMM</td>
+<td>PlaySoundA</td>
+</tr>
+<tr>
+<td>鼠标失控</td>
+<td>USER32</td>
+<td>SetCursorPos、GetCursorPos</td>
+</tr>
+<tr>
+<td>建立消息循环</td>
+<td>USER32</td>
+<td>GetMessage、TranslateMessage、DispatchMessage</td>
+</tr>
+<tr>
+<td>设置消息钩子</td>
+<td>USER32</td>
+<td>SetWindowHookEx、UnhookWindowHookEx、CallNextHookEx</td>
+</tr>
+<tr>
+<td>进程提权</td>
+<td>ADVAPI32</td>
+<td>OpenprocessToken、LookupPrivilegeValue、AdjustTokenPrivileges</td>
+</tr>
+<tr>
+<td>遍历进程</td>
+<td>KERNEL32</td>
+<td>CreateToolhelp32Snapshot、Process32First、Process32Next</td>
+</tr>
+</tbody></table>
+<p>将样本载入ida，整体上看<code>start()</code>函数，函数大体上是由两个if判断组成。</p>
+<p>由于<code>start()</code>函数大体上可以分成三个部分：启动部分、watchdog部分、main部分。</p>
+<h2 id="启动部分"><a href="#启动部分" class="headerlink" title="启动部分"></a>启动部分</h2><p>在最开始，程序先获取窗口长、宽和命令行参数。</p>
+<p><img src="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/others/20210423163416.png" alt="MEMZ009"></p>
+<p>由于我们第一次双击样本时自然是不带参数的，于是程序流跳转到下面两个弹窗的if判断部分。</p>
+<p>如果用户在这两个提示窗口都点击了确认，系统则会分配局部内存对象;</p>
+<p>以”<strong>/watch2dog</strong>“为参数创建<strong>5</strong>个名为<strong>MEMZ</strong>的进程。</p>
+<p><img src="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/others/20210423162827.png" alt="MEMZ013"></p>
+<p>之后以”<strong>/main</strong>“为参数再生成一个<strong>MEMZ</strong>的进程。</p>
+<p>到这里，样本创建了6个MEMZ的进程。</p>
+<p>然后<code>SetPriorityClass</code>函数把main进程的优先级设置为最高。</p>
+<p><img src="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/others/20210423162845.png" alt="MEMZ014"></p>
+<p>最后，用<code>ExitProcess</code>函数结束自己的进程。至此，启动部分结束。</p>
+<h2 id="watchdog部分"><a href="#watchdog部分" class="headerlink" title="watchdog部分"></a>watchdog部分</h2><p>首先判断是否为”/watchdog“为参数的MEMZ进程，如果不是，创建线程，注册窗口并进行消息循环</p>
+<p><img src="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/others/20210424135004.png" alt="MEMZ010"></p>
+<p>启动阶段创建的5个以“/watchdog”为参数的MEMZ进程。这5个进程一共应该创建了5个线程。我们进入sub_40114A看看这个线程具体干了些什么事。</p>
+<h3 id="sub-40114A"><a href="#sub-40114A" class="headerlink" title="sub_40114A"></a>sub_40114A</h3><p>首先<code>LocalAlloc</code>在堆中分配空间用来存路径字符串，然后<code>GetCurrentProcess</code>获取当前进程句柄，然后<code>GetProcessImageFileNameA</code>获取进程路径。</p>
+<p>然后一个while死循环，其中大概可以分为两个部分：</p>
+<p><code>CreateToolhelp32Snapshot</code>拍摄进程快照，再用<code>Process32FirstW</code>和<code>Process32NextW</code>进行遍历。do-while循环统计MEMZ进程的数量，将其存入v4变量。而sleep函数的存在也使得while死循环每隔一段时间统计当前MEMZ进程的个数并存放在v4变量中。</p>
+<p>v4存放当前遍历到的MEMZ进程数量，而v7存放上一次遍历到的MEMZ的进程的数量，一旦V4的值小于v7，代表如果我们关闭了一个MEMZ进程，那么就会被if检测语句检测到，执行sub_401021函数内容。结合之前运行病毒我们可以推测sub_401021就是蓝屏关机。</p>
+<p><img src="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/others/20210424135233.png" alt="MEMZ011"></p>
+<h3 id="sub-401021"><a href="#sub-401021" class="headerlink" title="sub_401021"></a>sub_401021</h3><p>这个函数就有意思了，</p>
+<p>do-while循环20次创建了20个线程，每次sleep0.1秒；而紧接着<code>RtlAdjustPrivilege</code>提权过后<code>NtRaiseHardError</code>制造系统蓝屏；</p>
+<p>之后<code>OpenProcessToken</code>获取进程token，<code>AdjustTokenPrivilege</code>利用得到的进程token提权过后<code>ExitWindowsEx</code>强制注销系统。</p>
+<p><img src="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/others/20210424140759.png" alt="MEMZ012"></p>
+<h4 id="StartAddress"><a href="#StartAddress" class="headerlink" title="StartAddress"></a>StartAddress</h4><p>线程函数指针<code>StartAddress</code>点不开，我们直接查看汇编代码如下：</p>
+<p><img src="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/others/20210424142006.png" alt="MEMZ013"></p>
+<p><code>SetWindowsHookEx</code>和<code>UnhookWindowsHookEx</code>用于给窗口下钩子，回调函数<code>fn</code>中看具体操作。</p>
+<p><img src="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/others/20210424143327.png" alt="MEMZ016"></p>
+<p>code=等于3代表着窗口即将被创建，lParam表示该窗口的基本信息，创建窗口之前修改当前窗口的这些信息用于随机修改窗口的位置。</p>
+<p>有26条消息保存在lpText所指向的地址中。使用<code>sub_401A55</code>获取随机数，<code>ds:dword_402AD0</code>存放的值为0x1A，随机数对0x1A取余，结果存放在edx寄存器，以实现在26条消息中随机选取一条<code>MessageBoxA</code>弹出显示。</p>
+<p><img src="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/others/20210424143903.png" alt="MEMZ014"></p>
+<p><img src="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/others/20210424144101.png" alt="MEMZ015"></p>
+<p>至此我们确认了sub_40114A函数的作用，正如我们上面的猜想，sub_40114A函数确实制造了蓝屏关机，先创建20个线程弹出大量位置和内容都随机的窗口，再蓝屏、强制关机。</p>
+<h3 id="sub-401000"><a href="#sub-401000" class="headerlink" title="sub_401000"></a>sub_401000</h3><p>sub_401000是个回调函数。16和22分别对应窗口消息<code>WM_CLOSE</code>和<code>WM_ENDSESSION</code>，而<code>WM_CLOSE</code>或<code>WM_ENDSESSION</code>消息是在系统关机时，由操作系统发送给各个窗口。</p>
+<p><img src="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/others/20210424144700.png" alt="MEMZ017"></p>
+<p>如果是<code>WM_CLOSE</code>和<code>WM_ENDSESSION</code>，则调用sub_401021函数蓝屏强制关机，如果是其他消息，丢给系统默认处理函数<code>DefWindowProcW</code>。</p>
+<p><code>sub_401021</code>这个强制关机函数在两处被调用。第一个是监测watchdog参数的MEMZ进程数量，如有减少就调用。第二个是监测用户是否主动关机，如果主动关机也调用此函数。这和我们运行阶段看到的一致。</p>
+<h2 id="main部分"><a href="#main部分" class="headerlink" title="main部分"></a>main部分</h2><p>main部分大致也可细分为两个部分：覆盖MBR部分和10个线程部分。</p>
+<p>我们先来看看下面的10个线程部分：</p>
+<h3 id="10个线程部分"><a href="#10个线程部分" class="headerlink" title="10个线程部分"></a>10个线程部分</h3><p>此处的do-while循环以v8为计数器循环十次，调用<code>CreateThread</code>创建线程，创建10个线程。参数v9被赋予初始值off_405130，每次循环自增2。</p>
+<p><img src="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/others/20210425194030.png" alt="MEMZ022"></p>
+<p>off_405130</p>
+<p>off_405130内容如下：</p>
+<p><img src="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/others/20210425195220.png" alt="MEMZ023"></p>
+<p>稍微修改一下，显示为下图这样：</p>
+<p><img src="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/others/20210425195334.png" alt="MEMZ024"></p>
+<p>结合上面的代码，容易看出，此处数据是个结构体组成的数组，数组元素有10个，结构体大致如下：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">FuncAddrDelay</span> &#123;</span></span><br><span class="line">	DWORD	pFuncAddr;</span><br><span class="line">  	DWORD	dwTimeDelay;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>j结合代码，我们知道<code>CreateThread</code>创建了10个进程，每次创建有一定的延迟时间，延迟时间和进程的函数地址组成一个结构体，共10组放在一个大数组off_405130里。</p>
+<p>然后sub_401A2B依次调用这10个函数。10个函数每个的返回值被保存在v1，每次循环都会在if语句中判断v1自减1后是否为0，其实返回值就是决定循环的次数，以及这10个函数的激活时间。这10个函数中，有的需要一个固定的激活时间，有的需要一个随机的激活时间，只需要控制返回值即v1就可以了。</p>
+<p><img src="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/others/20210425201757.png" alt="MEMZ025"></p>
+<p>这10个函数就是打开浏览器，鼠标失控，弹窗，弹图标等等操作。下面我们来单独看看：</p>
+<h4 id="线程1："><a href="#线程1：" class="headerlink" title="线程1："></a>线程1：</h4><p><strong>运行浏览器软件，随机打开网站浏览，运行任务管理器，注册表管理器，计算器等</strong></p>
+<p><img src="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/others/20210425203950.png" alt="MEMZ025"></p>
+<p><img src="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/others/20210425204159.png" alt="MEMZ026"></p>
+<p><img src="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/others/20210425204322.png" alt="MEMZ027"></p>
+<h4 id="线程2："><a href="#线程2：" class="headerlink" title="线程2："></a>线程2：</h4><p><strong>鼠标位置失控</strong></p>
+<p><img src="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/others/20210425204647.png" alt="MEMZ028"></p>
+<h4 id="线程3"><a href="#线程3" class="headerlink" title="线程3"></a>线程3</h4><p><strong>插入键盘事件，对键盘进行监控</strong></p>
+<p><img src="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/others/20210425205228.png" alt="MEMZ029"></p>
+<h4 id="线程4"><a href="#线程4" class="headerlink" title="线程4"></a>线程4</h4><p><strong>病毒运行的过程中发出声音</strong></p>
+<p><img src="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/others/20210425205421.png" alt="MEMZ030"></p>
+<h4 id="线程5"><a href="#线程5" class="headerlink" title="线程5"></a>线程5</h4><p><strong>改变屏幕显示复制桌面界面</strong></p>
+<p><img src="C:\Users\thh\Pictures\恶意样本\MEMZ\MEMZ031.png" alt="MEMZ031"></p>
+<p>此次<code>BitBlt</code>的作用就是对桌面像素进行位块转换。</p>
+<h4 id="线程6"><a href="#线程6" class="headerlink" title="线程6"></a>线程6</h4><p><strong>弹出“Still using this computer?”的MessageBox</strong></p>
+<p><img src="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/others/20210425210621.png" alt="MEMZ032"></p>
+<p><img src="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/others/20210425210629.png" alt="MEMZ033"></p>
+<h4 id="线程7"><a href="#线程7" class="headerlink" title="线程7"></a>线程7</h4><p><strong>在鼠标位置绘制图标</strong></p>
+<p><img src="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/others/20210425212305.png" alt="MEMZ034"></p>
+<h4 id="线程8"><a href="#线程8" class="headerlink" title="线程8"></a>线程8</h4><p><strong>枚举子窗口，将子窗口变形</strong></p>
+<p><img src="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/others/20210425212000.png" alt="MEMZ035"></p>
+<h4 id="线程9"><a href="#线程9" class="headerlink" title="线程9"></a>线程9</h4><p><strong>界面大小改变，桌面变形</strong></p>
+<p><img src="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/others/20210425212732.png" alt="MEMZ036"></p>
+<h4 id="线程10"><a href="#线程10" class="headerlink" title="线程10"></a>线程10</h4><p><strong>改变桌面颜色</strong></p>
+<p><img src="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/others/20210425213003.png" alt="MEMZ037"></p>
+<h3 id="覆盖MBR部分"><a href="#覆盖MBR部分" class="headerlink" title="覆盖MBR部分"></a>覆盖MBR部分</h3><p>该部分是病毒的核心部分，硬盘最开头的512字节就是MBR部分。MBR里的代码进行各种初始化工作，然后加载才操作系统。而该病毒覆盖MBR（Master Boot Record）主引导区，写入播放循环彩虹猫视频的代码，导致Windows系统无法启动。</p>
+<p>先来看看覆盖MBR部分：</p>
+<p><img src="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/others/20210425185943.png" alt="MEMZ018"></p>
+<p>首先<code>CreateFileA</code>以读写权限打开文件PhysicalDrive0即主硬盘文件，再在堆中写入恶意代码，然后通过<code>WriteFile</code>将堆中的恶意代码写到PhysicalDrive0主硬盘文件。然后用<code>LocalAlloc</code>以0为初始值分配一段内存空间，拷贝两段恶意代码数据到分配的内存空间。</p>
+<p>第一段<code>byte_402118</code>大小304字节覆盖部分MBR（或者初始化恶意代码？），第二段开始于510字节处，<code>byte_402248</code>大小1952字节，推测是覆盖MBR后播放的那段彩虹猫的数据。（不太清楚为什么中间跳过了206字节？）。</p>
+<p>然后作者创建了个note.txt文件，在其中写了段话，并用notepad.exe打开note.txt文件。</p>
+<p><img src="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/others/20210425192629.png" alt="MEMZ021"></p>
+<p>静态分析大概就这些内容，接下来我们动态调试看看该样本程序的具体流程如何。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">Author: </span><span class="post-copyright-info"><a href="mailto:undefined">0xNOPE</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">Link: </span><span class="post-copyright-info"><a href="http://0xnope.top/2021/04/21/%E8%AE%B0%E4%B8%80%E6%AC%A1MEMZ%E6%A0%B7%E6%9C%AC%E5%88%86%E6%9E%90/">http://0xnope.top/2021/04/21/%E8%AE%B0%E4%B8%80%E6%AC%A1MEMZ%E6%A0%B7%E6%9C%AC%E5%88%86%E6%9E%90/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Windows/">Windows</a><a class="post-meta__tags" href="/tags/Malware-analysis/">Malware_analysis</a></div><div class="post_share"><div class="social-share" data-image="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/DemeterWu/demeter-wu-xmas2020-countdown-7.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button button--animated"><i class="fas fa-qrcode"></i> Donate</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/others/20210303184943.jpg" target="_blank"><img class="post-qr-code-img" src="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/others/20210303184943.jpg" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/others/20210303184950.jpg" target="_blank"><img class="post-qr-code-img" src="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/others/20210303184950.jpg" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li></ul></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2021/04/10/%E5%90%AF%E5%8A%A8%E6%8A%80%E6%9C%AF/"><img class="next-cover" src="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/DemeterWu/demeter-wu-xmas2020-countdown-5.jpg" onerror="onerror=null;src='https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/others/20210303185012.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">Next Post</div><div class="next_info">启动技术</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> Related Articles</span></div><div class="relatedPosts-list"><div><a href="/2021/03/16/PEB/" title="PEB"><img class="cover" src="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/DemeterWu/demeter-wu-final-30.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-03-16</div><div class="title">PEB</div></div></a></div><div><a href="/2021/03/13/TLS回调函数/" title="TLS回调函数"><img class="cover" src="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/DemeterWu/demeter-wu-resize2.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-03-13</div><div class="title">TLS回调函数</div></div></a></div><div><a href="/2021/03/15/TEB/" title="TEB"><img class="cover" src="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/DemeterWu/demeter-wu-xmas2020-countdown-5.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-03-15</div><div class="title">TEB</div></div></a></div><div><a href="/2021/04/10/启动技术/" title="启动技术"><img class="cover" src="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/DemeterWu/demeter-wu-xmas2020-countdown-5.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-04-10</div><div class="title">启动技术</div></div></a></div><div><a href="/2021/03/06/PE文件总结/" title="PE文件总结"><img class="cover" src="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/DemeterWu/demeter-wu-resize2.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-03-06</div><div class="title">PE文件总结</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Catalog</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%A0%B7%E6%9C%AC%E4%BF%A1%E6%81%AF"><span class="toc-number">1.</span> <span class="toc-text">样本信息</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%BF%90%E8%A1%8C%E6%A0%B7%E6%9C%AC"><span class="toc-number">2.</span> <span class="toc-text">运行样本</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%9D%99%E6%80%81%E5%88%86%E6%9E%90"><span class="toc-number">3.</span> <span class="toc-text">静态分析</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%90%AF%E5%8A%A8%E9%83%A8%E5%88%86"><span class="toc-number">3.1.</span> <span class="toc-text">启动部分</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#watchdog%E9%83%A8%E5%88%86"><span class="toc-number">3.2.</span> <span class="toc-text">watchdog部分</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#sub-40114A"><span class="toc-number">3.2.1.</span> <span class="toc-text">sub_40114A</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#sub-401021"><span class="toc-number">3.2.2.</span> <span class="toc-text">sub_401021</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#StartAddress"><span class="toc-number">3.2.2.1.</span> <span class="toc-text">StartAddress</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#sub-401000"><span class="toc-number">3.2.3.</span> <span class="toc-text">sub_401000</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#main%E9%83%A8%E5%88%86"><span class="toc-number">3.3.</span> <span class="toc-text">main部分</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#10%E4%B8%AA%E7%BA%BF%E7%A8%8B%E9%83%A8%E5%88%86"><span class="toc-number">3.3.1.</span> <span class="toc-text">10个线程部分</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BA%BF%E7%A8%8B1%EF%BC%9A"><span class="toc-number">3.3.1.1.</span> <span class="toc-text">线程1：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BA%BF%E7%A8%8B2%EF%BC%9A"><span class="toc-number">3.3.1.2.</span> <span class="toc-text">线程2：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BA%BF%E7%A8%8B3"><span class="toc-number">3.3.1.3.</span> <span class="toc-text">线程3</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BA%BF%E7%A8%8B4"><span class="toc-number">3.3.1.4.</span> <span class="toc-text">线程4</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BA%BF%E7%A8%8B5"><span class="toc-number">3.3.1.5.</span> <span class="toc-text">线程5</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BA%BF%E7%A8%8B6"><span class="toc-number">3.3.1.6.</span> <span class="toc-text">线程6</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BA%BF%E7%A8%8B7"><span class="toc-number">3.3.1.7.</span> <span class="toc-text">线程7</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BA%BF%E7%A8%8B8"><span class="toc-number">3.3.1.8.</span> <span class="toc-text">线程8</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BA%BF%E7%A8%8B9"><span class="toc-number">3.3.1.9.</span> <span class="toc-text">线程9</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BA%BF%E7%A8%8B10"><span class="toc-number">3.3.1.10.</span> <span class="toc-text">线程10</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A6%86%E7%9B%96MBR%E9%83%A8%E5%88%86"><span class="toc-number">3.3.2.</span> <span class="toc-text">覆盖MBR部分</span></a></li></ol></li></ol></li></ol></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2021 By 0xNOPE</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">Hi, welcome to my <a target="_blank" rel="noopener" href="https://github.com/">blog</a>!</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="font-plus" type="button" title="Increase font size"><i class="fas fa-plus"></i></button><button id="font-minus" type="button" title="Decrease font size"><i class="fas fa-minus"></i></button><button id="translateLink" type="button" title="Switch Between Traditional Chinese And Simplified Chinese">繁</button><button id="darkmode" type="button" title="Switch Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between single-column and double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back To Top"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.jsdelivr.net/npm/medium-zoom/dist/medium-zoom.min.js"></script><script>var preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.remove("loaded")
+
+  }
+}
+window.addEventListener('load',preloader.endLoading())</script><div class="js-pjax"></div><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-fluttering-ribbon.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
