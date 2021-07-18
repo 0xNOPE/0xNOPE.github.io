@@ -1,0 +1,284 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>lpk劫持样本分析 | 0xNOPE</title><meta name="keywords" content="Windows,Malware_analysis"><meta name="author" content="0xNOPE"><meta name="copyright" content="0xNOPE"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="样本概况样本基本信息 病毒名称：3601.exe所属家族：Trojan-DDoS.Win32.Macri.atkMD5：    304bbe0e401d84edf63b68588335ceb6SHA-1：    8389fb0466449755c9c33716ef6f9c3e0f4e19c8SHA-256：    1f3e836b4677a6df2c2d34d3c6413df2c5e448b5bc">
+<meta property="og:type" content="article">
+<meta property="og:title" content="lpk劫持样本分析">
+<meta property="og:url" content="http://0xnope.top/2021/07/18/lpk%E5%8A%AB%E6%8C%81%E6%A0%B7%E6%9C%AC%E5%88%86%E6%9E%90/index.html">
+<meta property="og:site_name" content="0xNOPE">
+<meta property="og:description" content="样本概况样本基本信息 病毒名称：3601.exe所属家族：Trojan-DDoS.Win32.Macri.atkMD5：    304bbe0e401d84edf63b68588335ceb6SHA-1：    8389fb0466449755c9c33716ef6f9c3e0f4e19c8SHA-256：    1f3e836b4677a6df2c2d34d3c6413df2c5e448b5bc">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/jiaocha/20210309170813.jpg">
+<meta property="article:published_time" content="2021-07-18T06:00:18.000Z">
+<meta property="article:modified_time" content="2021-07-18T10:51:58.286Z">
+<meta property="article:author" content="0xNOPE">
+<meta property="article:tag" content="Windows">
+<meta property="article:tag" content="Malware_analysis">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/jiaocha/20210309170813.jpg"><link rel="shortcut icon" href="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/others/20210303185002.png"><link rel="canonical" href="http://0xnope.top/2021/07/18/lpk%E5%8A%AB%E6%8C%81%E6%A0%B7%E6%9C%AC%E5%88%86%E6%9E%90/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"簡"},
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  relativeDate: {
+    homepage: true,
+    post: true
+  },
+  runtime: '',
+  date_suffix: {
+    just: 'Just',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'mediumZoom',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2021-07-18 18:51:58'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const fontSizeVal = saveToLocal.get('global-font-size')
+    if (fontSizeVal !== undefined) {
+      document.documentElement.style.setProperty('--global-font-size', fontSizeVal + 'px')
+    }
+    })(window)</script><meta name="generator" content="Hexo 5.4.0"><link rel="alternate" href="/atom.xml" title="0xNOPE" type="application/atom+xml">
+</head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">Loading...</div></div></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/huiye/huiye.jpg" onerror="onerror=null;src='https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/others/20210303184956.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">17</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">Tags</div><div class="length-num">8</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">Categories</div><div class="length-num">3</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/jiaocha/20210309170813.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">0xNOPE</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">lpk劫持样本分析</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2021-07-18T06:00:18.000Z" title="Created 2021-07-18 14:00:18">2021-07-18</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2021-07-18T10:51:58.286Z" title="Updated 2021-07-18 18:51:58">2021-07-18</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Reverse/">Reverse</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="lpk劫持样本分析"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post View:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="样本概况"><a href="#样本概况" class="headerlink" title="样本概况"></a>样本概况</h1><h2 id="样本基本信息"><a href="#样本基本信息" class="headerlink" title="样本基本信息"></a>样本基本信息</h2><blockquote>
+<p>病毒名称：3601.exe<br>所属家族：Trojan-DDoS.Win32.Macri.atk<br>MD5：    304bbe0e401d84edf63b68588335ceb6<br>SHA-1：    8389fb0466449755c9c33716ef6f9c3e0f4e19c8<br>SHA-256：    1f3e836b4677a6df2c2d34d3c6413df2c5e448b5bc1d5702f2a96a7f6ca0d7fb                                                                                              File size：    52.50 KB (53760 bytes)</p>
+</blockquote>
+<p><img src="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/others/20210718141012.png" alt="LPK_3601004（vt）"></p>
+<h2 id="测试环境及工具"><a href="#测试环境及工具" class="headerlink" title="测试环境及工具"></a>测试环境及工具</h2><blockquote>
+<p>测试环境：Windows 7</p>
+<p>测试工具：PEID、StudyPE、IDA Pro、x32dbg、火绒剑</p>
+</blockquote>
+<h2 id="沙箱检测"><a href="#沙箱检测" class="headerlink" title="沙箱检测"></a>沙箱检测</h2><p><img src="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/others/20210718141041.png" alt="LPK_3601005（行为）"></p>
+<p><img src="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/others/20210718151805.png" alt="LPK_3601006（网络行为）"></p>
+<p>从上面的沙箱检测结果，初步可以得到的信息：</p>
+<p>该病毒启动具有隐藏界面的cmd窗口，将自身拷贝到其他目录，修改网络代理设置，连接了三个域名等操作。</p>
+<h1 id="样本分析"><a href="#样本分析" class="headerlink" title="样本分析"></a>样本分析</h1><h2 id="主要流程概述"><a href="#主要流程概述" class="headerlink" title="主要流程概述"></a>主要流程概述</h2><p>第一次运行样本后会创建系统服务、添加注册表的键值，根据系统时间随机生成一个名字的文件，将母体拷贝到该文件并释放到C:/Windows路径下，给新生成的子文件icykmk.exe添加服务的自启动项，结束母体并删除。</p>
+<p>之后运行icykmk.exe，首先加载hra33.dll然后创建4个线程。</p>
+<p>加载的hra33.dll首先遍历文件，判断是否存在.exe，如果存在，就继续递归寻找下一个；否则，就在同路径下创建lpk.dll；然后判断是否存在.rar或者.zip，如果存在，就继续递归寻找下一个，如果不存在就往压缩包添加lpk.dll。</p>
+<p>线程1：通过弱口令感染局域网内的共享文件夹，将病毒释放到共享文件夹中。<br>线程2：连接到控制端sbcq.f3322.org，获取当前系统信息（CPU型号，系统版本，上线时间，内存信息等）发送给病毒作者，然后就循环等待病毒作者的指令接收，判断info的类型，做出相应的操作。<br>线程3：连接控制端<a target="_blank" rel="noopener" href="http://www.520123.xyz.具体功能同线程2./">www.520123.xyz。具体功能同线程2。</a><br>线程4：连接控制端<a href="http://www.520520520.org:9426。具体功能同线程2。">www.520520520.org:9426。具体功能同线程2。</a></p>
+<p>流程图如下：</p>
+<p><img src="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/others/20210718184440.png" alt="LPK_3601046（流程图）"></p>
+<h2 id="样本动作捕捉"><a href="#样本动作捕捉" class="headerlink" title="样本动作捕捉"></a>样本动作捕捉</h2><p>运行样本，火绒剑捕捉样本行为动作：</p>
+<p>设置注册表项：</p>
+<p><img src="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/others/20210718154640.png" alt="LPK_3601010（注册表操作）"></p>
+<p>创建进程操作：</p>
+<p><img src="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/others/20210718154733.png" alt="LPK_3601011（进程操作1）"></p>
+<p>文件增删查改操作：</p>
+<p><img src="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/others/20210718154752.png" alt="LPK_3601011（文件操作）"></p>
+<p>网络收包发包操作：</p>
+<p><img src="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/others/20210718154815.png" alt="LPK_3601013（网络操作）"></p>
+<p>下面是随机生成名字的子程序进程和har33.dll：</p>
+<p><img src="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/others/20210718154851.png" alt="LPK_3601014（hra33dll）"></p>
+<h2 id="具体行为分析"><a href="#具体行为分析" class="headerlink" title="具体行为分析"></a>具体行为分析</h2><p>查壳</p>
+<p><img src="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/others/20210718154023.png" alt="002"></p>
+<p><img src="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/others/20210718154113.png" alt="LPK_3601003（脱壳）"></p>
+<p>首先，查壳，病毒upx加壳，手动esp定律或者upx -d脱壳后PEID看到病毒是由Microsoft Visual C++ 6.0编写。</p>
+<p>studyPE查看导入表：</p>
+<p><img src="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/others/20210718154447.png" alt="LPK_3601007（导出函数）"></p>
+<h3 id="初次运行初始化服务"><a href="#初次运行初始化服务" class="headerlink" title="初次运行初始化服务"></a>初次运行初始化服务</h3><p>IDA Pro7.5载入样本文件，进入WinMain函数：</p>
+<p>WinMain函数中是网络相关的函数,判断服务及注册表是否存在，并且母体病毒开始初始化。</p>
+<p><img src="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/others/20210718155132.png" alt="LPK_3601015（WinMain）"></p>
+<p>sub_405A52()函数内部就是判断键值是否存在。就是判断是否创建了一个名为”Ghijkl Nopqrstu Wxy“的服务，如果创建了，就返回1，执行if当中的操作；如果没有创建，那么执行else当中的操作，创建服务。简言之，就是判断样本是否第一次运行。</p>
+<p>下面分析else当中的sub_405B6E()：</p>
+<h4 id="sub-405B6E"><a href="#sub-405B6E" class="headerlink" title="sub_405B6E()"></a>sub_405B6E()</h4><p>1、在ADVAPI32.dll中加载函数，遍历文件。</p>
+<p><img src="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/others/20210718160245.png" alt="LPK_3601016（sub_405B6E）"></p>
+<p>2、根据时间随机生成数作为文件名进行拼接，然后拷贝到C:\Windows\目录下。</p>
+<p><img src="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/others/20210718160307.png" alt="LPK_3601017（sub_405B6E）"></p>
+<p><img src="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/others/20210718160339.png" alt="LPK_3601018（sub_405B6E）"></p>
+<p>3、创建服务。</p>
+<p><img src="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/others/20210718160448.png" alt="LPK_3601019（sub_405B6E）"></p>
+<p><img src="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/others/20210718160522.png" alt="LPK_3601020（sub_405B6E）"></p>
+<p>4、添加注册表项。</p>
+<p><img src="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/others/20210718160553.png" alt="LPK_3601021（sub_405B6E）"></p>
+<h4 id="sub-40355B"><a href="#sub-40355B" class="headerlink" title="sub_40355B()"></a>sub_40355B()</h4><p>然后分析下面的sub_40355B()：</p>
+<p><img src="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/others/20210718160739.png" alt="LPK_3601022（sub_40355B）"></p>
+<p>上面的伪代码可以看到：母体通过字符串拼接执行cmd命令删除自身，设置高优先级。</p>
+<p>以上代码，程序第一次运行，将自己拷贝到指定系统目录，创建服务，启动服务，删除自身。</p>
+<p>若服务已被创建，则通过判断，第二次打开程序则直接打开服务。调用sub_40561A()。</p>
+<h3 id="再次运行sub-40561A-主函数"><a href="#再次运行sub-40561A-主函数" class="headerlink" title="再次运行sub_40561A()主函数"></a>再次运行sub_40561A()主函数</h3><p>会先判断键值是否存在，如果存在的话就开启服务，进入服务回调继续分析。</p>
+<p><img src="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/others/20210718161131.png" alt="LPK_3601015（WinMain）"></p>
+<p>sub_40561A()主函数内容如下：</p>
+<p><img src="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/others/20210718161234.png" alt="LPK_3601023（sub_40561A）"><br>作为新程序的主程序，之前先做了服务初始化操作，主要分析下面的函数。</p>
+<h4 id="回调函数EnumFunc："><a href="#回调函数EnumFunc：" class="headerlink" title="回调函数EnumFunc："></a>回调函数EnumFunc：</h4><p><img src="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/others/20210718161547.png" alt="LPK_3601024（枚举）"></p>
+<h4 id="sub-4053A6"><a href="#sub-4053A6" class="headerlink" title="sub_4053A6()"></a>sub_4053A6()</h4><p>sub_4053A6()函数主要作用的就是加载dll。<br>在sub_4053A6()函数中，检查注册表，打开hra33.dll，拷贝2个资源到hra33.dll。大致如下：</p>
+<p><img src="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/others/20210718161904.png" alt="LPK_3601025（sub_4053A6）"></p>
+<p>释放资源：</p>
+<p><img src="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/others/20210718161918.png" alt="LPK_3601026（sub_4053A6）"></p>
+<p>sub_4034E5()函数加载hra33.dll，该dll具有dll劫持功能。</p>
+<p>下面分析一下创建的四个线程当中的具体操作。</p>
+<h4 id="线程1："><a href="#线程1：" class="headerlink" title="线程1："></a>线程1：</h4><p>初始化一堆字符串，根据下面获取主机名以及网络连接的函数，IPC内置的一些弱口令。</p>
+<p><img src="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/others/20210718162345.png" alt="LPK_3601028（sub_402DD5）"></p>
+<p>弱口令攻击：</p>
+<p><img src="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/others/20210718162358.png" alt="LPK_3601029（sub_402DD5）"></p>
+<p><img src="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/others/20210718162429.png" alt="LPK_3601030（sub_402DD5）"></p>
+<p>线程1的作用就是：通过弱口令感染局域网其他主机， 如果连接成功通过，通过共享目录将病毒传播出去， 利用 at 定时执行启动任务， 通过 admin$共享传播病毒。</p>
+<h4 id="线程234："><a href="#线程234：" class="headerlink" title="线程234："></a>线程234：</h4><p>第二、三、四线程功能基本相同，区别是连接的地址不同。</p>
+<p>就拿线程2来说：</p>
+<p>该线程首先与sbcq.f3322.org控制端进行网络连接，如果连接成功继续往下，不然就返回。然后初始化socket套接字。</p>
+<p><img src="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/others/20210718163039.png" alt="LPK_3601031（sub_4051E0）"></p>
+<p>sub_4060F0()函数当中获取了一些系统内存cpu等信息，</p>
+<p><img src="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/others/20210718163640.png" alt="LPK_3601032（sub_4060F0）"></p>
+<p><img src="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/others/20210718163654.png" alt="LPK_3601033（sub_4060F0）"></p>
+<p>之后又加载了hra33.dll，将收集到的系统相关信息发送到控制端，等待接收控制端发来的指令，当接收的数据&gt;6时才开始进行swtich…case中进行匹配。</p>
+<p>指令 &gt; 6时：</p>
+<p>当指令为0x10时，会从网络上下载恶意代码到临时的文件然后执行它。</p>
+<p><img src="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/others/20210718164137.png" alt="LPK_3601034（sub_4051E0）"></p>
+<p>当指令为0x12：<br>打开互斥体，防止多开带来的检测风险。根据系统时间随机生成文件名，初始化一些信息，设置优先级，更新病毒，如果下载成功就删除服务，注册表以及自身的程序。执行新的程序，退出本身。</p>
+<p><img src="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/others/20210718164256.png" alt="LPK_3601035（sub_4051E0）"></p>
+<p><img src="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/others/20210718164358.png" alt="LPK_3601036（sub_4051E0）"></p>
+<p>当指令为0x14：<br>打开IE浏览器并弹框。</p>
+<p><img src="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/others/20210718164444.png" alt="LPK_3601037（sub_4051E0）"></p>
+<p>当指令 &lt; 0x6时：<br>指令等于0x6：<br>和0x12执行一致，打开互斥体，防止多开带来的检测风险。根据系统时间随机生成文件名，初始化一些信息，设置优先级，更新病毒，如果下载成功就删除服务，注册表以及自身的程序。执行新的程序，退出本身。</p>
+<p><img src="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/others/20210718164716.png" alt="LPK_3601038（sub_4051E0）"></p>
+<p>当指令为0x2：</p>
+<p>进行初始化socket</p>
+<p><img src="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/others/20210718164841.png" alt="LPK_3601039（sub_4051E0）"></p>
+<p>当指令为0x3：</p>
+<p>sub_403280函数，里面仍然会做一些判断，继续分析各个函数，会发现这是一个发包的函数。</p>
+<p><img src="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/others/20210718164830.png" alt="LPK_3601040（sub_4051E0）"></p>
+<p>GET数据请求头：</p>
+<p><img src="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/others/20210718164957.png" alt="LPK_3601041（sub_403280）"></p>
+<p>GET请求数据包：</p>
+<p><img src="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/others/20210718165008.png" alt="LPK_3601042（sub_403280）"></p>
+<p>指令为0x4：<br>仍旧是初始化socket。</p>
+<p><img src="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/others/20210718165200.png" alt="LPK_3601033（sub_4051E0）"></p>
+<p>至此线程2分析结束。</p>
+<p>总结一下，它获取系统信息，cpu信息，内存信息，将这些信息发往控制端，通过控制端发来的指令类型执行不同的操作。</p>
+<p>第二个远程连接服务器地址sbcq.f3322.org</p>
+<p>第三个远程连接服务器地址<a target="_blank" rel="noopener" href="http://www.520123.xyz/">www.520123.xyz</a></p>
+<p>第四个远程连接服务器地址被加密，”1NTUHRYRExYRExYREx3c0eQJChcRFUM=”，解密后是<a target="_blank" rel="noopener" href="http://www.520520520.org:9426/">www.520520520.org:9426</a></p>
+<p>接着来分析分析劫持lpk.dll的hra33.dll。</p>
+<h4 id="hra33-dll："><a href="#hra33-dll：" class="headerlink" title="hra33.dll："></a>hra33.dll：</h4><p>Dllmain函数中分析，获取模块名字后判断病毒文件是否存在，如果存在，就在同目录下将内存数据写入到.TMP临时文件，并创建一个胡互斥体，检测同目录下是否存在lpk.dll，如果存在，加载lpk.dll到zip，rar文件，并且同目录下创建exe。如果没有被加载就释放dll文件。之后获取原lpk.dll，将其替换为自己的lpk.dll，实现lpk劫持。</p>
+<p><img src="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/others/20210718165618.png" alt="LPK_3601043（hra33）"></p>
+<p><img src="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/others/20210718165639.png" alt="LPK_3601044（hra33）"></p>
+<p>sub_1000142B()当中是添加压缩包的操作：</p>
+<p>利用rar的shell命令进行操作，先检查同路径有没有lpk.dll，如果没有，就以最大速度解压文件，将lpk.dll添加到文件夹中，然后再重新压缩文件，最后删除临时文件。</p>
+<p><img src="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/others/20210718165821.png" alt="LPK_3601045（sub_1000142B）"></p>
+<p>以上，就是hra33.dll当中的操作。</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>手工查杀步骤或是工具查杀步骤或是查杀思路等。</p>
+<p>1、使用PcHumter结束病毒程序</p>
+<p>2、删除HKEY_LOCAL_MACHINE\system\CurrentControlset\services\Ghijkl Nopqrstu Wxy下注册表键；</p>
+<p>3、结束服务：Ghijkl Nopqrstu Wxy，删除服务对应的exe文件。</p>
+<p>4、删除C:\windows\system32\hra33.dll文件；</p>
+<p>5、删除生成的lpk.dll文件。</p>
+<p>样本文件如下，请在虚拟机中运行！！！</p>
+<p>提取码1234</p>
+<p><a target="_blank" rel="noopener" href="https://pan.baidu.com/s/1EeLqt_l263-6nscIGX1y7g">https://pan.baidu.com/s/1EeLqt_l263-6nscIGX1y7g</a></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">Author: </span><span class="post-copyright-info"><a href="mailto:undefined">0xNOPE</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">Link: </span><span class="post-copyright-info"><a href="http://0xnope.top/2021/07/18/lpk%E5%8A%AB%E6%8C%81%E6%A0%B7%E6%9C%AC%E5%88%86%E6%9E%90/">http://0xnope.top/2021/07/18/lpk%E5%8A%AB%E6%8C%81%E6%A0%B7%E6%9C%AC%E5%88%86%E6%9E%90/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Windows/">Windows</a><a class="post-meta__tags" href="/tags/Malware-analysis/">Malware_analysis</a></div><div class="post_share"><div class="social-share" data-image="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/jiaocha/20210309170813.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button button--animated"><i class="fas fa-qrcode"></i> Donate</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/others/20210303184943.jpg" target="_blank"><img class="post-qr-code-img" src="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/others/20210303184943.jpg" alt="微信"/></a><div class="post-qr-code-desc">微信</div></li><li class="reward-item"><a href="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/others/20210303184950.jpg" target="_blank"><img class="post-qr-code-img" src="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/others/20210303184950.jpg" alt="支付宝"/></a><div class="post-qr-code-desc">支付宝</div></li></ul></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2021/05/06/%E4%B8%80%E6%AC%A1Emotet%E6%81%B6%E6%84%8F%E6%A0%B7%E6%9C%AC%E5%88%86%E6%9E%90/"><img class="next-cover" src="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/DemeterWu/demeter-wu-2019-xmas-countdown5-v2.jpg" onerror="onerror=null;src='https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/others/20210303185012.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">Next Post</div><div class="next_info">一次Emotet恶意样本分析</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> Related Articles</span></div><div class="relatedPosts-list"><div><a href="/2021/05/06/一次Emotet恶意样本分析/" title="一次Emotet恶意样本分析"><img class="cover" src="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/DemeterWu/demeter-wu-2019-xmas-countdown5-v2.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-05-06</div><div class="title">一次Emotet恶意样本分析</div></div></a></div><div><a href="/2021/04/21/记一次MEMZ样本分析/" title="记一次MEMZ样本分析"><img class="cover" src="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/DemeterWu/demeter-wu-2019-xmas-countdown6.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-04-21</div><div class="title">记一次MEMZ样本分析</div></div></a></div><div><a href="/2021/04/28/记一次Word宏Downloader样本分析/" title="记一次Word宏Downloader样本分析"><img class="cover" src="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/jiaocha/20210309170839.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-04-28</div><div class="title">记一次Word宏Downloader样本分析</div></div></a></div><div><a href="/2021/03/16/PEB/" title="PEB"><img class="cover" src="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/jiaocha/20210309170627.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-03-16</div><div class="title">PEB</div></div></a></div><div><a href="/2021/03/15/TEB/" title="TEB"><img class="cover" src="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/jiaocha/20210309170853.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-03-15</div><div class="title">TEB</div></div></a></div><div><a href="/2021/03/13/TLS回调函数/" title="TLS回调函数"><img class="cover" src="https://thhao0501.oss-cn-hongkong.aliyuncs.com/img/DemeterWu/demeter-wu-xmas2019-logo-full.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-03-13</div><div class="title">TLS回调函数</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Catalog</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%A0%B7%E6%9C%AC%E6%A6%82%E5%86%B5"><span class="toc-number">1.</span> <span class="toc-text">样本概况</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%B7%E6%9C%AC%E5%9F%BA%E6%9C%AC%E4%BF%A1%E6%81%AF"><span class="toc-number">1.1.</span> <span class="toc-text">样本基本信息</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B5%8B%E8%AF%95%E7%8E%AF%E5%A2%83%E5%8F%8A%E5%B7%A5%E5%85%B7"><span class="toc-number">1.2.</span> <span class="toc-text">测试环境及工具</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B2%99%E7%AE%B1%E6%A3%80%E6%B5%8B"><span class="toc-number">1.3.</span> <span class="toc-text">沙箱检测</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%A0%B7%E6%9C%AC%E5%88%86%E6%9E%90"><span class="toc-number">2.</span> <span class="toc-text">样本分析</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BB%E8%A6%81%E6%B5%81%E7%A8%8B%E6%A6%82%E8%BF%B0"><span class="toc-number">2.1.</span> <span class="toc-text">主要流程概述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%B7%E6%9C%AC%E5%8A%A8%E4%BD%9C%E6%8D%95%E6%8D%89"><span class="toc-number">2.2.</span> <span class="toc-text">样本动作捕捉</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E8%A1%8C%E4%B8%BA%E5%88%86%E6%9E%90"><span class="toc-number">2.3.</span> <span class="toc-text">具体行为分析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9D%E6%AC%A1%E8%BF%90%E8%A1%8C%E5%88%9D%E5%A7%8B%E5%8C%96%E6%9C%8D%E5%8A%A1"><span class="toc-number">2.3.1.</span> <span class="toc-text">初次运行初始化服务</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#sub-405B6E"><span class="toc-number">2.3.1.1.</span> <span class="toc-text">sub_405B6E()</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#sub-40355B"><span class="toc-number">2.3.1.2.</span> <span class="toc-text">sub_40355B()</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%86%8D%E6%AC%A1%E8%BF%90%E8%A1%8Csub-40561A-%E4%B8%BB%E5%87%BD%E6%95%B0"><span class="toc-number">2.3.2.</span> <span class="toc-text">再次运行sub_40561A()主函数</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9B%9E%E8%B0%83%E5%87%BD%E6%95%B0EnumFunc%EF%BC%9A"><span class="toc-number">2.3.2.1.</span> <span class="toc-text">回调函数EnumFunc：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#sub-4053A6"><span class="toc-number">2.3.2.2.</span> <span class="toc-text">sub_4053A6()</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BA%BF%E7%A8%8B1%EF%BC%9A"><span class="toc-number">2.3.2.3.</span> <span class="toc-text">线程1：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BA%BF%E7%A8%8B234%EF%BC%9A"><span class="toc-number">2.3.2.4.</span> <span class="toc-text">线程234：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#hra33-dll%EF%BC%9A"><span class="toc-number">2.3.2.5.</span> <span class="toc-text">hra33.dll：</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">3.</span> <span class="toc-text">总结</span></a></li></ol></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2021 By 0xNOPE</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">Hi, welcome to my <a target="_blank" rel="noopener" href="https://github.com/">blog</a>!</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="font-plus" type="button" title="Increase font size"><i class="fas fa-plus"></i></button><button id="font-minus" type="button" title="Decrease font size"><i class="fas fa-minus"></i></button><button id="translateLink" type="button" title="Switch Between Traditional Chinese And Simplified Chinese">繁</button><button id="darkmode" type="button" title="Switch Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between single-column and double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back To Top"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.jsdelivr.net/npm/medium-zoom/dist/medium-zoom.min.js"></script><script>var preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.remove("loaded")
+
+  }
+}
+window.addEventListener('load',preloader.endLoading())</script><div class="js-pjax"></div><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-fluttering-ribbon.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
